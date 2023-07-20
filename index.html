@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Document</title>
+</head>
+<html>
+
+<body>
+
+    <div class="container-grid">
+        <header>Un dev se merite !!!!</header>
+        <nav class="nav-principal">
+            <!-- afficher l'historique des mots de passe proposés par l'utilisateur -->
+            <h3>Historique des mots de passe proposés :</h3>
+            <ul id="passwordHistory"></ul>
+        </nav>
+        <main>
+            <!-- affiche le nombre d'essais restants -->
+            <h2>Essais restants: <span id="remaining"></span></h2>
+            <input type="text" id="input" disabled>
+            <!-- nombre d'essais restants est mis à jour dans la fonction  -->
+            <button onclick="checkPassword()">Vérifier</button>
+            <div id="result"></div>
+            <div id="wrapper">
+                <div id="box">
+                    <div class="button" onclick="dial(1)">1</div>
+                    <div class="button" onclick="dial(2)">2</div>
+                    <div class="button" onclick="dial(3)">3</div>
+                    <div class="button" onclick="dial(4)">4</div>
+                    <div class="button" onclick="dial(5)">5</div>
+                    <div class="button" onclick="dial(6)">6</div>
+                    <div class="button" onclick="dial(7)">7</div>
+                    <div class="button" onclick="dial(8)">8</div>
+                    <div class="button" onclick="dial(9)">9</div>
+                    <div id="zero" class="button" onclick="dial(0)">0</div>
+                </div>
+            </div>
+        </main>
+        <aside>
+
+        </aside>
+        <footer></footer>
+    </div>
+
+
+
+
+
+
+
+    <!-- Ce bouton devient visible lorsque le mot de passe est correct ou lorsque le nombre d'essais restants atteint zéro. Lorsque l'utilisateur clique sur ce bouton, la fonction redirectToOtherPage() est appelée pour le rediriger vers une autre page. -->
+    <button id="suiteButton" onclick="redirectToOtherPage()" style="display: none;">Suite</button>
+
+
+
+
+
+    <script src="assets/js/script.js"></script>
+</body>
+
+</html>

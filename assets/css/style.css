@@ -1,0 +1,113 @@
+@font-face {
+    font-family: 'Better Together Script';
+    src: url('../fonts/south-baggreg.ttf') format('truetype');
+} 
+
+* {
+    box-sizing: border-box;
+background-color: #de8b8b;
+
+}
+
+body {
+    margin: 0;}
+    
+#box {
+    /* carré et responsive */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /*3 colonnes */
+    grid-template-rows: repeat(4, 1fr);
+    /* 4 lignes */
+    width: 40vw;
+    /* 40% hauteur*/
+    height: 40vw;
+    /* 40% largeur d'ecran*/
+    min-height:80vh;
+    border: 10px solid transparent;
+    grid-gap: 5px;
+    /* espacement entre les cellules d'une grille, espace de 3 pixels entre chaque élément dans la grille, créant une marge visuelle entre eux*/
+}
+
+/* centré horizontalement et verticalement dans la fenêtre du navigateur */
+.wrapper {
+    display: grid;
+    place-content: center;
+    width: 100vw;
+    height: 100vh;
+    border:10px solid black
+
+}
+
+/* L'élément avec l'ID "zero" est positionné dans la deuxième colonne de la grille. */
+#zero {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+/* Tous les éléments <div> qui sont enfants directs de l'élément avec l'ID "box" centrés horizontalement et verticalement dans leur cellule de grille respective. */
+#box>div {
+    display: grid;
+    place-content: center;
+    border-radius: 10px;
+    /* rayon */
+    /* background-color: purple; */
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    background-image: url("../img/fleursCerisier.png"); /* Chemin de l'image de fond */
+    background-size: cover;
+    font-weight: bold;
+    font-size: 180%;
+}
+
+/* Les éléments avec la classe "correct" auront une couleur de texte orange. */
+.correct {
+    color: orange;
+}
+
+/* Les éléments avec la classe "correct-position" auront une couleur de texte verte. */
+.correct-position {
+    color: green;
+}
+
+/* si le mdp dejà saisie, message apparait en violet*/
+.duplicate {
+    color: rgb(75, 12, 75);
+}
+
+
+.container-grid{
+    display:grid;
+    grid-template-columns: 20vw 60vw 20vw;
+    grid-template-rows: 20vw 60vw 20vw;
+    grid-template-areas: 
+    "header header header"
+    "navigation myMain myAside"
+    "footer footer footer";
+}
+header {
+    grid-area: header;
+    grid-area: header;
+    font-family: 'south baggreg', cursive;
+}
+
+footer{
+    grid-area: footer;
+}
+.nav-principale{
+    grid-area: navigation;
+}
+main{
+    grid-area: myMain;
+    display: grid;
+    place-content: center;
+    width: 100%;
+    height: 100%;
+    font-family: 'south baggreg', cursive;
+
+}
+aside{
+    font-family: 'south baggreg', cursive;
+    grid-area: myAside;
+}
