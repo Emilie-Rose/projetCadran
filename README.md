@@ -17,5 +17,6 @@ Fonctionnalité présente:
 
 A faire:
 - timer
+- ameliorer le temps de reponse des touche des box
 - localstorage (enregistrer la selection et recuperer les données)
 
