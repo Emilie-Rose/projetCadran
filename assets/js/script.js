@@ -2,7 +2,7 @@ let password = generatePassword();
 let remainingAttempts = 10;
 let enteredPasswords = [];
 let passwordHistory = document.getElementById("passwordHistory");
-
+let clickSound = new Audio('assets/audio/son_toucheMachAEcrire.mp3'); 
 // génère un mot de passe à 3 chiffres aléatoire en sélectionnant des chiffres de manière aléatoire et en les supprimant de la liste des chiffres disponibles.
 function generatePassword() {
   let password = "";
@@ -16,12 +16,14 @@ function generatePassword() {
 }
 // lorsque l'utilisateur clique sur l'un des boutons du cadran. Elle ajoute le chiffre sélectionné au champ de texte d'entrée, sauf si le mot de passe est déjà complet
 function dial(number) {
+  clickSound.play();
   let input = document.getElementById("input");
   if (input.value.length < 3) {
     input.value += number;
   }
 }
-// lorsque l'utilisateur clique sur le bouton "Vérifier". Elle vérifie si le mot de passe entré est correct et met à jour le résultat en conséquence. Elle gère également les cas où le mot de passe est incorrect ou lorsque le nombre d'essais restants atteint zéro.
+
+// btn verifier : Elle vérifie si le mot de passe entré est correct et met à jour le résultat en conséquence. Elle gère également les cas où le mot de passe est incorrect ou lorsque le nombre d'essais restants atteint zéro.
 function checkPassword() {
   let input = document.getElementById("input");
   let result = document.getElementById("result");
@@ -57,6 +59,8 @@ function checkPassword() {
     if (enteredPassword === password) {
       result.innerHTML = "Mot de passe correct!";
       result.style.color = "black";
+      result.style.fontWeight = "bold";
+      result.style.fontStyle = "italic";
       input.disabled = true;
       document.getElementById("remaining").innerHTML = "0";
       document.getElementById("suiteButton").style.display = "block";
@@ -68,7 +72,9 @@ function checkPassword() {
           password;
         
         
-        result.style.color = "black";
+        result.style.color = "maroon";
+        result.style.fontWeight = "bold";
+        result.style.fontStyle = "italic";
         input.disabled = true;
         document.getElementById("remaining").innerHTML = "0";
         document.getElementById("suiteButton").style.display = "block";
@@ -77,7 +83,9 @@ function checkPassword() {
           "Mot de passe incorrect! " +
           "<br> Mot de passe entré : " +
           displayPassword;
-        result.style.color = "black";
+        result.style.color = "maroon";
+        result.style.fontWeight = "bold";
+        result.style.fontStyle = "italic";
         input.value = "";
         document.getElementById("remaining").innerHTML = remainingAttempts;
       }
@@ -85,26 +93,31 @@ function checkPassword() {
     if (remainingAttempts === 0 || enteredPassword === password) {
       minAttempts = Math.min(minAttempts, 10 - remainingAttempts);
     }
-    function displayMinAttemptsHistory() {
-      let historique = document.getElementById("historique");
-      historique.innerHTML =
-        "Nombre minimum de coups pour trouver le bon mot de passe : " +
-        minAttempts;
-    }
+// function displayMinAttemptsHistory() {
+//       let historique = document.getElementById("historique");
+//       historique.innerHTML =
+//         "Nombre minimum de coups pour trouver le bon mot de passe : " +
+//         minAttempts;
+// }
     let passwordHistory = document.getElementById("passwordHistory");
     let listItem = document.createElement("div");
+    listItem.style.textAlign = "center";
     listItem.innerHTML = displayPassword;
     console.log(enteredPassword);
     passwordHistory.appendChild(listItem);
+    //resetInput();
   }
 }
 
- // lorsque l'utilisateur clique sur le bouton "Suite". Elle redirige l'utilisateur vers une autre page (bravo.gif).
- const suiteButton = document.getElementById("suiteButton");
+// lorsque l'utilisateur clique sur le bouton "Suite". Elle redirige l'utilisateur vers une autre page (bravo.gif).
+const suiteButton = document.getElementById("suiteButton");
  const redirectToOtherPage = () => {
+  alert("Bravo !!! Fermez cette fenêtre pour decouvrir la surprise ?!");
   window.location.href = "assets/img/bravo.gif";
+
 };
 
+// creation du cadran et des boutons cliquables
 function setupButtonListeners() {
   let box = document.getElementById("box");
 
@@ -134,9 +147,31 @@ function setupButtonListeners() {
     .addEventListener("click", redirectToOtherPage);
 }
 
+// bouton Information
+function showInfo(){
+  alert("Instructions  : \n\n1. Recherchez un password à 3 chiffres en selectionnant une combinaison.\n\n2. Vous aurez 10 tentatives possible. \n\n3. Attention! Lors de la selection du password: Si le chiffre est correct mais mal placé, il sera affiché en orange. Si le chiffre est correct et bien placé, il sera affiché en vert. Si le chiffre est incorrect, il sera affiché en rouge. \n\n4.  Vous avez 10 essais pour deviner le mdp. \n\n Bonne chance à vous :) \n\n");
+
+}
+
+function clearInput() {
+  document.getElementById("input").value = "";
+}
+
 //event listener
 window.addEventListener("DOMContentLoaded", function () {
   setupButtonListeners();
 });
+
+// localstorage A faire apres ou avant le timer
+// function updateScore(){
+// // Récupérer les scores précédents du LocalStorage
+// // Ajouter le score actuel (temps écoulé) à la liste
+// // Trier les scores par ordre croissant (plus petit en premier)
+//   // Enregistrer seulement les 5 premiers scores (les meilleurs)
+//   // Enregistrer les scores dans le LocalStorage
+//   // Déterminer le classement de l'utilisateur
+//   // maj le texte de l'indicateur de classement
+//   // Mettre à jour le meilleur score
+// }
 
 let minAttempts = Infinity; // Initialise le nombre minimum de coups à une valeur très élevée pour commencer.

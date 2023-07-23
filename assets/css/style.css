@@ -6,13 +6,67 @@
 * {
   box-sizing: border-box;
   background-color: #de8b8b;
-  font-family: 'Kaori', cursive;
+  font-family: 'Kaori', cursive ; 
 }
+/* pour le timer a implementer : a faire*/
+/* .display{
+  display: -webkit-box;
+  margin-bottom: 25px;
+} */
+
+.top-nav {
+  transform: translate(-50%, 0);
+  text-align: end;
+  margin-left: 20%;
+  /* display: grid;
+  grid-template-columns: 20vw 60vw 20vw;
+  grid-template-rows: 20vw 60vw 20vw;
+  transform: translate(-50%, 0);
+  text-align: center;
+  margin-left: 20%; */
+  /* grid-template-areas:
+    "header myHeader myHeader"
+    "nav myMain myMain"
+    "nav footer footer"; */
+}
+ .containers{
+  display: flex;
+    justify-content: center;
+ }
+
+ /* centré horizontalement et verticalement dans la fenêtre du navigateur */
+.wrapper {
+  display: flex;
+  place-content: center;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  padding: 20px;
+}
+.wrapper-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50vw;
+  height: 50vh;
+  
+}
+
+.wrapper-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50vw;
+  height: 50vh;
+}
+
+/* a faire
+.nbInput {
+} */
 
 body {
-  margin: 0;
+  margin: 20px;
 }
-
 #box {
   /* carré et responsive */
   display: grid;
@@ -25,18 +79,20 @@ body {
   height: 40vw;
   /* 40% largeur d'ecran*/
   min-height: 80vh;
-  border: 10px solid transparent;
+  /* border: 10px solid transparent; */
+  border: 10px solid #8C3232;
+  border-radius: 10px;
+  /* couleur de la box #8C3232 */
+  background-color: #8C3232;
+  
+
   grid-gap: 5px;
   /* espacement entre les cellules d'une grille, espace de 3 pixels entre chaque élément dans la grille, créant une marge visuelle entre eux*/
 }
-
-/* centré horizontalement et verticalement dans la fenêtre du navigateur */
-.wrapper {
-  display: grid;
-  place-content: center;
-  width: 100vw;
-  height: 100vh;
-  border: 10px solid black;
+.title{
+  transform: translate(-50%, 0);
+    text-align: center;
+    margin-left: 20%;
 }
 
 /* L'élément avec l'ID "zero" est positionné dans la deuxième colonne de la grille. */
@@ -48,7 +104,16 @@ body {
 #box>div:active
 {
   transform: scale(.9);
+  
 }
+
+#box>div:hover {
+  /*masquer l'image du backgroud-image (url) et le remplacer par la couleur de fond #F2949C*/
+  background-image: none;
+  background-color: #F2949C;
+  color: #8C3232;
+}
+
 
 /* Tous les éléments <div> qui sont enfants directs de l'élément avec l'ID "box" centrés horizontalement et verticalement dans leur cellule de grille respective. */
 #box > div {
@@ -65,7 +130,9 @@ body {
   background-size: cover;
   font-weight: bold;
   font-size: 1.5rem; /*160%*/
+
 }
+
 
 /* Les éléments avec la classe "correct" auront une couleur de texte orange. */
 .correct {
@@ -89,43 +156,43 @@ body {
   color: rgb(75, 12, 75);
 }
 
-.container-grid {
-  display: grid;
-  grid-template-columns: 20vw 60vw 20vw;
-  grid-template-rows: 20vw 60vw 20vw;
-  grid-template-areas:
-    "header header header"
-    "navigation myMain myAside"
-    "footer footer footer";
-}
-header {
-  grid-area: header;
-  grid-area: header;
-  font-family: "KaoriGel", cursive;
-}
 
-footer {
-  grid-area: footer;
-}
-.nav-principale {
-  grid-area: navigation;
-}
-main {
-  grid-area: myMain;
-  display: grid;
-  place-content: center;
-  width: 100%;
-  height: 100%;
-  font-family: "KaoriGel", cursive;
-}
-aside {
-  font-family: "KaoriGel", cursive;
-  grid-area: myAside;
-}
-#suiteButton
-{
-  /*agrandir le boutton*/
-  width: 100%;
-  height: 100%;
+.container-info{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
 }
+.btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  background-color: #D9626B;
+  padding: 5px;
+  border-radius: 5px;
+  margin-bottom: 35px;
+  width: 100px;
+  font-size: 20px;
+
+}
+
+.btn p {
+  margin: 0;
+  color: 
+  #8C3232;
+  font-weight: bold;
+  background-color: #D9626B;
+}
+
+.btn:hover {
+  background-color: #8C3232;
+  color: #D9626B;
+}
+
+.passwordHistory{
+  width: 400px;
+  margin-left: 30px;
+}
+

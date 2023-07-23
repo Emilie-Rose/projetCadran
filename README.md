@@ -12,9 +12,10 @@ Fonctionnalité présente:
   - Code bon on arrête (recompense)
     - Récompense : afficher une image de victoire ou votre CV
     - Code faux on continue (10 fois ou indéfiniment)
+- on peut reset de la saisie
+- mettre en forme le CSS (en cours)
 
 A faire:
 - timer
-- reset de la saisie
 - localstorage (enregistrer la selection et recuperer les données)
-- mettre en forme le CSS
+

@@ -11,41 +11,61 @@
 
 <body>
 
-    <div class="container-grid">
-        <header>Bienvenue ...</header>
-        <nav class="nav-principal">
-            <p>Un dev se merite !!!!</p>
-            <p> recherchez un password à 3 chiffres en selectionnant une combinaison.</p>
-            <p>Vous aurez 10 tentatives possible</p>
-            <p><i>Attention! Lors de la selection du password:
-                    <ul>
-                        <li>Si le chiffre est correct mais mal placé, il sera affiché en orange.</li>
-                        <li>Si le chiffre est correct et bien placé, il sera affiché en vert.</li>
-                        <li>Si le chiffre est incorrect, il sera affiché en rouge.</li>
-                    </ul>
-                </i>
-            </p>
-            <!-- afficher l'historique des mots de passe proposés par l'utilisateur -->
-            <h3>Historique des mots de passe proposés :</h3>
-            <ul id="passwordHistory"></ul>
-        </nav>
-        <main>
+    <div class="top-nav">
+        <h1>Un dev se merite !!!!</h1>
+    </div>
+
+    <div class="container-info">
+        <button class="btn" onclick="showInfo()">Info !</button>
+    </div>
+
+    <!-- timer + barre de progression à faire 
+    <div class="display">timer</div> -->
+
+    <div class="containers">
+
+        <!-- Colonne de gauche -->
+        <div class="wrapper-left">
+            <div id="passwordHistory">
+                <h3>Historique des mots de passe proposés :</h3>
+            </div>
+        </div>
+        <!-- Colonne centrale -->
+        <div class="wrapper">
+            <!-- barre au dessus du cadran pour afficher le nombre de chiffres à trouver : a faire
+            <input type="number" class="nbInput" readonly> -->
+            <br>
+            <div id="box"></div>
+
+        </div>
+        <!-- Colonne de droite -->
+        <div class="wrapper-right">
             <!-- affiche le nombre d'essais restants -->
             <h2>Essais restants: <span id="remaining"></span></h2>
+            <br>
+            <!-- Champ de saisie pour que l'utilisateur entre le mot de passe deviné -->
             <input type="text" id="input" disabled>
-            <!-- nombre d'essais restants est mis à jour dans la fonction  -->
-            <button onclick="checkPassword()">Vérifier</button>
-            <div id="result"></div>
-            <div id="wrapper">
-                <div id="box"></div>
-            </div>
-        </main>
-        <aside>
-            <!-- Ce bouton devient visible lorsque le mot de passe est correct ou lorsque le nombre d'essais restants atteint zéro. Lorsque l'utilisateur clique sur ce bouton, la fonction redirectToOtherPage() est appelée pour le rediriger vers une autre page. -->
-            <button id="suiteButton" onclick="redirectToOtherPage()" style="display: none;">Suite</button>
+            <!-- Bouton pour effacer le contenu du champ de saisie -->
+            <button class="btn" onclick="clearInput()">Effacer</button>
 
-        </aside>
-        <footer></footer>
+            <br>
+            <!-- Bouton pour vérifier le mot de passe deviné -->
+            <button class="btn" onclick="checkPassword()">Vérifier</button>
+
+
+            <br>
+            <!-- Affiche le résultat de la tentative de deviner le mot de passe -->
+            <div id="result"></div>
+            <div id="result"></div>
+
+            <br>
+            <!-- Ce bouton devient visible lorsque le mdp est correct ou lorsque le nombre 
+                d'essais restants atteint zéro. 
+                Lorsque l'utilisateur clique sur ce bouton, la fonction redirectToOtherPage()
+                 est appelée pour le rediriger vers une autre page. -->
+            <button class="btn" id="suiteButton" onclick="redirectToOtherPage()" style="display: none;">Pour la
+                suite, appuyez ici!!</button>
+        </div>
     </div>
 
     <script src="assets/js/script.js"></script>
