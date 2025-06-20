@@ -38,7 +38,7 @@
       const tbody = document.getElementById("scoresBody");
 
       if (scores.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5">Aucun score enregistré.</td></tr>';
+        document.getElementById("scoresTable").innerHTML = "<p>Aucun score enregistré pour l'instant.</p>";
         return;
       }
 
