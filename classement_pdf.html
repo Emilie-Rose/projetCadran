@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classement à imprimer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+  <h1>🏅 Classement à imprimer</h1>
+
+  <table id="classementTable">
+    <thead>
+      <tr>
+        <th>🏅 Rang</th>
+        <th>👤 Pseudo</th>
+        <th>🔢 Coups</th>
+        <th>⏱ Temps (s)</th>
+        <th>📅 Date</th>
+      </tr>
+    </thead>
+    <tbody id="classementBody">
+      <!-- Scores insérés ici -->
+    </tbody>
+  </table>
+
+  <div class="buttons">
+    <button onclick="window.print()">🖨️ Imprimer</button>
+    <button onclick="exportPDF()">📄 Exporter en PDF</button>
+    <button onclick="window.location.href='index.html'">🏠 Menu principal</button>
+  </div>
+
+  <script>
+    function afficherClassement() {
+      const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
+      const tbody = document.getElementById("classementBody");
+
+      if (scores.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">Aucun score disponible.</td></tr>';
+        return;
+      }
+
+      // Tri par coups puis temps
+      scores.sort((a, b) => a.attempts - b.attempts || a.time - b.time);
+
+      scores.forEach((score, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${score.name}</td>
+          <td>${score.attempts}</td>
+          <td>${score.time}</td>
+          <td>${score.date}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function exportPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const table = document.getElementById("classementTable");
+
+      html2canvas(table).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+        const imgProps = doc.getImageProperties(imgData);
+        const pdfWidth = doc.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        doc.addImage(imgData, "PNG", 0, 10, pdfWidth, pdfHeight);
+        doc.save("classement.pdf");
+      });
+    }
+
+    window.onload = afficherClassement;
+  </script>
+
+</body>
+</html>

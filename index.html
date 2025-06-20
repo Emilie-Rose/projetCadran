@@ -1,74 +1,50 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <title>Cadran</title>
+  <meta charset="UTF-8">
+  <title>Jeu du Cadran</title>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<html>
-
 <body>
+  <h1>🔐 Trouve le code secret !</h1>
 
-    <div class="top-nav">
-        <h1>Un dev se merite !!!!</h1>
+  <!-- Zone de saisie du pseudo -->
+  <div id="pseudoInput" class="input-group">
+    <label for="playerName">Entrez votre pseudo :</label>
+    <input type="text" id="playerName" placeholder="Votre prénom">
+    <button class="btn" onclick="startGame()">Commencer</button>
+  </div>
+  <button id="darkModeToggle" class="btn">🌓 Mode sombre</button>
+
+  <!-- Zone principale du jeu, cachée au départ -->
+  <div id="gameZone" style="display:none;">
+    <div id="timer">0</div>
+    <div id="box"></div>
+    <input type="text" id="input" readonly>
+
+    <div class="btn-group">
+      <button onclick="checkPassword()">Vérifier</button>
+      <button onclick="clearInput()">Effacer</button>
     </div>
 
-    <div class="container-info">
-        <button class="btn" onclick="showInfo()">Info !</button>
+    <progress id="progressBar" value="10" max="10"></progress>
+    <div id="remaining">10</div>
+    <div id="result"></div>
+    <div id="passwordHistory"><h3>Historique des mots de passe proposés :</h3></div>
+
+    <div class="btn-group">
+      <button id="suiteButton" style="display:none">Suite</button>
+      <button id="resetButton" onclick="resetGame()">Rejouer</button>
+      <a href="scores.html" class="btn">Voir le classement</a>
     </div>
+  </div>
 
-    <!-- timer + barre de progression à faire 
-    <div class="display">timer</div> -->
+  <!-- Podium final avec pseudo du joueur -->
+  <div id="podium" style="display:none; text-align:center;">
+    <h2>🏆 Bravo <span id="winnerName"></span> !</h2>
+    <img src="assets/img/bravo.gif" alt="Podium" style="max-width:300px; margin-top:20px;">
+  </div>
 
-    <div class="containers">
-
-        <!-- Colonne de gauche -->
-        <div class="wrapper-left">
-            <div id="passwordHistory">
-                <h3>Historique des mots de passe proposés :</h3>
-            </div>
-        </div>
-        <!-- Colonne centrale -->
-        <div class="wrapper">
-            <!-- barre au dessus du cadran pour afficher le nombre de chiffres à trouver : a faire
-            <input type="number" class="nbInput" readonly> -->
-            <br>
-            <div id="box"></div>
-
-        </div>
-        <!-- Colonne de droite -->
-        <div class="wrapper-right">
-            <!-- affiche le nombre d'essais restants -->
-            <h2>Essais restants: <span id="remaining"></span></h2>
-            <br>
-            <!-- Champ de saisie pour que l'utilisateur entre le mot de passe deviné -->
-            <input type="text" id="input" disabled>
-            <!-- Bouton pour effacer le contenu du champ de saisie -->
-            <button class="btn" onclick="clearInput()">Effacer</button>
-
-            <br>
-            <!-- Bouton pour vérifier le mot de passe deviné -->
-            <button class="btn" onclick="checkPassword()">Vérifier</button>
-
-
-            <br>
-            <!-- Affiche le résultat de la tentative de deviner le mot de passe -->
-            <div id="result"></div>
-            <div id="result"></div>
-
-            <br>
-            <!-- Ce bouton devient visible lorsque le mdp est correct ou lorsque le nombre 
-                d'essais restants atteint zéro. 
-                Lorsque l'utilisateur clique sur ce bouton, la fonction redirectToOtherPage()
-                 est appelée pour le rediriger vers une autre page. -->
-            <button class="btn" id="suiteButton" onclick="redirectToOtherPage()" style="display: none;">Pour la
-                suite, appuyez ici!!</button>
-        </div>
-    </div>
-
-    <script src="assets/js/script.js"></script>
+  <script src="assets/js/script.js"></script>
 </body>
-
 </html>

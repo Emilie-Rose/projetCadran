@@ -1,177 +1,207 @@
 let password = generatePassword();
 let remainingAttempts = 10;
 let enteredPasswords = [];
-let passwordHistory = document.getElementById("passwordHistory");
-let clickSound = new Audio('assets/audio/son_toucheMachAEcrire.mp3'); 
-// génère un mot de passe à 3 chiffres aléatoire en sélectionnant des chiffres de manière aléatoire et en les supprimant de la liste des chiffres disponibles.
+let timer = 0;
+let interval;
+let minAttempts = Infinity;
+let playerName = "";
+
+const clickSound = new Audio("assets/audio/son_toucheMachAEcrire.mp3");
+
+// Génère un mot de passe unique à 3 chiffres
 function generatePassword() {
-  let password = "";
-  let digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  const digits = ["0","1","2","3","4","5","6","7","8","9"];
+  let pwd = "";
   for (let i = 0; i < 3; i++) {
-    let randomIndex = Math.floor(Math.random() * digits.length);
-    password += digits[randomIndex];
-    digits.splice(randomIndex, 1);
+    const randIndex = Math.floor(Math.random() * digits.length);
+    pwd += digits[randIndex];
+    digits.splice(randIndex, 1);
   }
-  return password;
-}
-// lorsque l'utilisateur clique sur l'un des boutons du cadran. Elle ajoute le chiffre sélectionné au champ de texte d'entrée, sauf si le mot de passe est déjà complet
-function dial(number) {
-  clickSound.play();
-  let input = document.getElementById("input");
-  if (input.value.length < 3) {
-    input.value += number;
-  }
+  return pwd;
 }
 
-// btn verifier : Elle vérifie si le mot de passe entré est correct et met à jour le résultat en conséquence. Elle gère également les cas où le mot de passe est incorrect ou lorsque le nombre d'essais restants atteint zéro.
+// Gère l'affichage des chiffres saisis
+function dial(number) {
+  const input = document.getElementById("input");
+  clickSound.play();
+  if (input.value.length < 3) input.value += number;
+}
+
+// Vérifie le mot de passe saisi
 function checkPassword() {
-  let input = document.getElementById("input");
-  let result = document.getElementById("result");
-  let enteredPassword = input.value;
-  console.log(enteredPassword);
+  const input = document.getElementById("input");
+  const result = document.getElementById("result");
+  const value = input.value;
+
+  if (value.length !== 3) return;
+  if (enteredPasswords.includes(value)) {
+    result.textContent = "Vous avez déjà entré ce mot de passe!";
+    result.style.color = "maroon";
+    input.value = "";
+    return;
+  }
+
+  enteredPasswords.push(value);
   let displayPassword = "";
 
-  if (enteredPassword.length === 3) {
-    if (enteredPasswords.includes(enteredPassword)) {
-      result.innerHTML = "Vous avez déjà entré ce mot de passe!";
+  for (let i = 0; i < 3; i++) {
+    const digit = value.charAt(i);
+    if (password.includes(digit)) {
+      displayPassword += digit === password.charAt(i)
+        ? `<span class='correct-position'>${digit}</span>`
+        : `<span class='correct'>${digit}</span>`;
+    } else {
+      displayPassword += `<span class='incorrect'>${digit}</span>`;
+    }
+  }
+
+  if (value === password) {
+    winGame();
+  } else {
+    remainingAttempts--;
+    if (remainingAttempts === 0) {
+      loseGame();
+    } else {
+      result.innerHTML = `Mot de passe incorrect!<br> ${displayPassword}`;
       result.style.color = "maroon";
       input.value = "";
-      return;
+      document.getElementById("remaining").textContent = remainingAttempts;
+      document.getElementById("progressBar").value = remainingAttempts;
     }
-
-    enteredPasswords.push(enteredPassword);
-    console.log(enteredPassword);
-
-    for (let i = 0; i < enteredPassword.length; i++) {
-      let digit = enteredPassword.charAt(i);
-      if (password.includes(digit)) {
-        if (digit === password.charAt(i)) {
-          displayPassword +=
-            '<span class="correct-position">' + digit + "</span>";
-        } else {
-          displayPassword += '<span class="correct">' + digit + "</span>";
-        }
-      } else {
-        displayPassword += '<span class="incorrect">' + digit + "</span>";
-      }
-    }
-
-    if (enteredPassword === password) {
-      result.innerHTML = "Mot de passe correct!";
-      result.style.color = "black";
-      result.style.fontWeight = "bold";
-      result.style.fontStyle = "italic";
-      input.disabled = true;
-      document.getElementById("remaining").innerHTML = "0";
-      document.getElementById("suiteButton").style.display = "block";
-    } else {
-      remainingAttempts--;
-      if (remainingAttempts === 0) {
-        result.innerHTML =
-          "Nombre maximal d'essais atteint. Le mot de passe était : " +
-          password;
-        
-        
-        result.style.color = "maroon";
-        result.style.fontWeight = "bold";
-        result.style.fontStyle = "italic";
-        input.disabled = true;
-        document.getElementById("remaining").innerHTML = "0";
-        document.getElementById("suiteButton").style.display = "block";
-      } else {
-        result.innerHTML =
-          "Mot de passe incorrect! " +
-          "<br> Mot de passe entré : " +
-          displayPassword;
-        result.style.color = "maroon";
-        result.style.fontWeight = "bold";
-        result.style.fontStyle = "italic";
-        input.value = "";
-        document.getElementById("remaining").innerHTML = remainingAttempts;
-      }
-    }
-    if (remainingAttempts === 0 || enteredPassword === password) {
-      minAttempts = Math.min(minAttempts, 10 - remainingAttempts);
-    }
-// function displayMinAttemptsHistory() {
-//       let historique = document.getElementById("historique");
-//       historique.innerHTML =
-//         "Nombre minimum de coups pour trouver le bon mot de passe : " +
-//         minAttempts;
-// }
-    let passwordHistory = document.getElementById("passwordHistory");
-    let listItem = document.createElement("div");
-    listItem.style.textAlign = "center";
-    listItem.innerHTML = displayPassword;
-    console.log(enteredPassword);
-    passwordHistory.appendChild(listItem);
-    //resetInput();
   }
+
+  if (remainingAttempts === 0 || value === password) {
+    minAttempts = Math.min(minAttempts, 10 - remainingAttempts);
+    saveScore();
+    clearInterval(interval);
+  }
+
+  // Ajoute à l'historique visuel
+  const listItem = document.createElement("div");
+  listItem.style.textAlign = "center";
+  listItem.innerHTML = displayPassword;
+  document.getElementById("passwordHistory").appendChild(listItem);
 }
 
-// lorsque l'utilisateur clique sur le bouton "Suite". Elle redirige l'utilisateur vers une autre page (bravo.gif).
-const suiteButton = document.getElementById("suiteButton");
- const redirectToOtherPage = () => {
-  alert("Bravo !!! Fermez cette fenêtre pour decouvrir la surprise ?!");
+function winGame() {
+  const result = document.getElementById("result");
+  result.textContent = "Mot de passe correct!";
+  result.style.color = "green";
+  document.getElementById("input").disabled = true;
+  document.getElementById("remaining").textContent = "0";
+  document.getElementById("suiteButton").style.display = "block";
+}
+
+function loseGame() {
+  const result = document.getElementById("result");
+  result.innerHTML = `Nombre maximal d'essais atteint. Le mot de passe était : <b>${password}</b>`;
+  result.style.color = "maroon";
+  document.getElementById("input").disabled = true;
+  document.getElementById("remaining").textContent = "0";
+  document.getElementById("suiteButton").style.display = "block";
+}
+
+function redirectToOtherPage() {
+  alert("Bravo !!! Fermez cette fenêtre pour découvrir la surprise !");
   window.location.href = "assets/img/bravo.gif";
-
-};
-
-// creation du cadran et des boutons cliquables
-function setupButtonListeners() {
-  let box = document.getElementById("box");
-
-  for (let i = 1; i <= 9; i++) {
-    let button = document.createElement("div");
-    button.classList.add("button");
-    button.textContent = i;
-    box.appendChild(button);
-  }
-
-  let zeroButton = document.createElement("div");
-  zeroButton.classList.add("button");
-  zeroButton.setAttribute("id", "btn-0");
-  zeroButton.textContent = "0";
-  box.appendChild(zeroButton);
-
-  // Add event listeners to the dynamically created buttons
-  let buttons = document.getElementsByClassName("button");
-  for (let j = 0; j < buttons.length; j++) {
-    buttons[j].addEventListener("click", function () {
-      dial(this.textContent);
-    });
-  }
-
-  document
-    .getElementById("suiteButton")
-    .addEventListener("click", redirectToOtherPage);
 }
 
-// bouton Information
-function showInfo(){
-  alert("Instructions  : \n\n1. Recherchez un password à 3 chiffres en selectionnant une combinaison.\n\n2. Vous aurez 10 tentatives possible. \n\n3. Attention! Lors de la selection du password: Si le chiffre est correct mais mal placé, il sera affiché en orange. Si le chiffre est correct et bien placé, il sera affiché en vert. Si le chiffre est incorrect, il sera affiché en rouge. \n\n4.  Vous avez 10 essais pour deviner le mdp. \n\n Bonne chance à vous :) \n\n");
+function resetGame() {
+  password = generatePassword();
+  remainingAttempts = 10;
+  enteredPasswords = [];
+  timer = 0;
 
+  document.getElementById("timer").textContent = "0";
+  clearInterval(interval);
+  startTimer();
+
+  document.getElementById("input").value = "";
+  document.getElementById("input").disabled = false;
+  document.getElementById("remaining").textContent = remainingAttempts;
+  document.getElementById("progressBar").value = 10;
+  document.getElementById("result").innerHTML = "";
+  document.getElementById("suiteButton").style.display = "none";
+  document.getElementById("passwordHistory").innerHTML = "<h3>Historique :</h3>";
+}
+
+function showInfo() {
+  alert("Instructions :\n\n1. Devinez un mot de passe à 3 chiffres.\n2. 10 essais maximum.\n3. Vert = chiffre bien placé, Orange = mal placé, Rouge = absent.");
 }
 
 function clearInput() {
   document.getElementById("input").value = "";
 }
 
-//event listener
-window.addEventListener("DOMContentLoaded", function () {
+function setupButtonListeners() {
+  const box = document.getElementById("box");
+  for (let i = 1; i <= 9; i++) {
+    const button = document.createElement("div");
+    button.classList.add("button");
+    button.textContent = i;
+    box.appendChild(button);
+  }
+const zeroButton = document.createElement("div");
+zeroButton.classList.add("button");
+zeroButton.setAttribute("id", "zero"); // ← nécessaire pour le ciblage CSS
+zeroButton.textContent = "0";
+box.appendChild(zeroButton);
+
+
+  const buttons = document.getElementsByClassName("button");
+  for (let btn of buttons) {
+    btn.addEventListener("click", () => dial(btn.textContent));
+  }
+
+  document.getElementById("suiteButton").addEventListener("click", redirectToOtherPage);
+}
+
+function startGame() {
+  const nameField = document.getElementById("playerName");
+  if (nameField.value.trim() === "") {
+    alert("Veuillez entrer un pseudo.");
+    return;
+  }
+  playerName = nameField.value.trim();
+  document.getElementById("pseudoInput").style.display = "none";
+  document.getElementById("gameZone").style.display = "block";
+  resetGame();
+}
+
+function startTimer() {
+  interval = setInterval(() => {
+    timer++;
+    document.getElementById("timer").textContent = timer;
+  }, 1000);
+}
+
+function saveScore() {
+  const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
+  scores.push({
+    name: playerName,
+    attempts: 10 - remainingAttempts,
+    time: timer,
+    date: new Date().toLocaleDateString("fr-FR")
+  });
+  scores.sort((a, b) => a.attempts - b.attempts || a.time - b.time);
+  localStorage.setItem("cadran_scores", JSON.stringify(scores.slice(0, 10)));
+}
+
+window.addEventListener("DOMContentLoaded", () => {
   setupButtonListeners();
+
+  // Appliquer le thème sombre si sauvegardé
+  const currentMode = localStorage.getItem("theme");
+  if (currentMode === "dark") {
+    document.body.classList.add("dark-mode");
+  }
+
+  const toggleBtn = document.getElementById("darkModeToggle");
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      const mode = document.body.classList.contains("dark-mode") ? "dark" : "light";
+      localStorage.setItem("theme", mode);
+    });
+  }
 });
-
-// localstorage A faire apres ou avant le timer
-// function updateScore(){
-// // Récupérer les scores précédents du LocalStorage
-// // Ajouter le score actuel (temps écoulé) à la liste
-// // Trier les scores par ordre croissant (plus petit en premier)
-//   // Enregistrer seulement les 5 premiers scores (les meilleurs)
-//   // Enregistrer les scores dans le LocalStorage
-//   // Déterminer le classement de l'utilisateur
-//   // maj le texte de l'indicateur de classement
-//   // Mettre à jour le meilleur score
-// }
-
-let minAttempts = Infinity; // Initialise le nombre minimum de coups à une valeur très élevée pour commencer.

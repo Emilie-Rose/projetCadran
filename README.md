@@ -1,22 +1,49 @@
 # projetCadran
-## Projet cadran en Javascript
 
-*One page in JavaScript.*
+## 🧩 Jeu du Cadran — Projet JavaScript
 
-Fonctionnalité présente: 
-- Générer le code aléatoire
-- Récupérer saisie user et la stocké
-- Créer un algorithme qui compare la saisie user et le code
-  - Vérifier la position de chaque chiffre et mettre des couleurs différentes
-- Vérification avec une boucle 
-  - Code bon on arrête (recompense)
-    - Récompense : afficher une image de victoire ou votre CV
-    - Code faux on continue (10 fois ou indéfiniment)
-- on peut reset de la saisie
-- mettre en forme le CSS (en cours)
+Ce projet est un jeu interactif développé en JavaScript pur, sans framework, avec une interface simple en **one page**.
 
-A faire:
-- timer
-- ameliorer le temps de reponse des touche des box
-- localstorage (enregistrer la selection et recuperer les données)
+---
+
+### ✅ Fonctionnalités implémentées :
+
+- 🎲 Génération d’un code secret aléatoire à 3 chiffres uniques
+- 🎮 Saisie utilisateur via un cadran interactif (boutons cliquables)
+- 🧠 Comparaison intelligente entre le code saisi et le code secret
+  - Affichage en **couleurs** : 
+    - 🟢 chiffre bien placé
+    - 🟠 chiffre présent mais mal placé
+    - 🔴 chiffre absent
+- 🔁 Vérification avec boucle d’essais (limité à 10 tentatives)
+- 🏁 Victoire :
+  - Affichage d’une image en cas de réussite
+- ❌ Echec :
+  - Affichage du bon code après 10 essais
+- 🔄 Bouton de réinitialisation de la saisie
+- 🎨 Mise en forme CSS responsive (en cours)
+
+---
+
+### 🚧 À faire / Améliorations en cours :
+
+- ⏱️ Ajouter un **timer** pour mesurer le temps de jeu
+- ⚡ Améliorer la **réactivité des touches** du cadran
+- 💾 Intégrer le **LocalStorage** :
+  - Sauvegarde du score, pseudo, temps et nombre d’essais
+  - Affichage d’un historique ou d’un classement
+- 🌗 Ajout d’un **mode sombre / clair** (toggle)
+- 🏅 Classement avec podium, pseudo, et export PDF
+
+---
+
+### 📁 Technologies utilisées :
+- HTML5
+- CSS3
+- JavaScript Vanilla
+
+---
+
+### 📌 Objectif :
+Projet personnel visant à consolider les bases de la programmation en JavaScript à travers la conception d’un mini-jeu logique, ludique et esthétique.
 

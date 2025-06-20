@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scores du jeu</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>🏆 Meilleurs Scores</h1>
+
+  <!-- Filtre pour sélectionner un pseudo -->
+  <div id="filtreContainer">
+    <label for="pseudoFilter">Filtrer par pseudo :</label>
+    <select id="pseudoFilter" onchange="filtrerScores()">
+      <option value="all">Tous les joueurs</option>
+    </select>
+  </div>
+
+  <!-- Tableau des scores -->
+  <table id="scoresTable">
+    <thead>
+      <tr>
+        <th>🏅 Rang</th>
+        <th>👤 Pseudo</th>
+        <th>🔢 Coups</th>
+        <th>⏱ Temps (s)</th>
+        <th>📅 Date</th>
+      </tr>
+    </thead>
+    <tbody id="scoresBody">
+      <!-- Scores injectés ici en JS -->
+    </tbody>
+  </table>
+
+  <!-- Boutons -->
+  <div class="buttons">
+    <button onclick="clearScores()">🗑️ Effacer les scores</button>
+    <button onclick="window.location.href='index.html'">🏠 Retour</button>
+    <button onclick="window.location.href='classement_pdf.html'">📄 Classement PDF</button>
+  </div>
+
+  <!-- Script JS -->
+  <script>
+    function displayScores() {
+      const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
+      const select = document.getElementById("pseudoFilter");
+      const uniqueNames = [...new Set(scores.map(s => s.name))];
+
+      uniqueNames.forEach(name => {
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.textContent = name;
+        select.appendChild(opt);
+      });
+
+      afficherTableau(scores);
+    }
+
+    function afficherTableau(scoreList) {
+      const tbody = document.getElementById("scoresBody");
+      tbody.innerHTML = "";
+
+      if (scoreList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">Aucun score trouvé pour ce pseudo.</td></tr>';
+        return;
+      }
+
+      // Tri : par nombre de coups puis temps
+      scoreList.sort((a, b) => a.attempts - b.attempts || a.time - b.time);
+
+      scoreList.forEach((score, index) => {
+        const row = document.createElement("tr");
+        const medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "";
+        row.innerHTML = `
+          <td>${medal} ${index + 1}</td>
+          <td>${score.name}</td>
+          <td>${score.attempts}</td>
+          <td>${score.time}</td>
+          <td>${score.date}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function filtrerScores() {
+      const selectedName = document.getElementById("pseudoFilter").value;
+      const allScores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
+      const filtered = selectedName === "all" ? allScores : allScores.filter(s => s.name === selectedName);
+      afficherTableau(filtered);
+    }
+
+    function clearScores() {
+      localStorage.removeItem("cadran_scores");
+      location.reload();
+    }
+
+    window.onload = displayScores;
+  </script>
+
+</body>
+</html>
