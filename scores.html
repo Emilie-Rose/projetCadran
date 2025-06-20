@@ -5,69 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Scores du jeu</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f8f8f8;
-      padding: 20px;
-      text-align: center;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-      color: #222;
-    }
-
-    #filtreContainer {
-      margin-bottom: 20px;
-    }
-
-    table {
-      width: 100%;
-      max-width: 700px;
-      margin: auto;
-      border-collapse: collapse;
-      background-color: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-    }
-
-    th {
-      background-color: #f0f0f0;
-    }
-
-    td:first-child {
-      font-weight: bold;
-    }
-
-    .buttons {
-      margin-top: 30px;
-    }
-
-    .buttons button {
-      margin: 5px;
-      padding: 10px 15px;
-      font-size: 16px;
-      cursor: pointer;
-      background: #7f2afd;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-
-    .buttons button:hover {
-      background: #5c1bb2;
-    }
-  </style>
 </head>
 <body>
 
   <h1>🏆 Meilleurs Scores</h1>
 
+  <!-- Filtre pour sélectionner un pseudo -->
   <div id="filtreContainer">
     <label for="pseudoFilter">Filtrer par pseudo :</label>
     <select id="pseudoFilter" onchange="filtrerScores()">
@@ -75,6 +18,7 @@
     </select>
   </div>
 
+  <!-- Tableau des scores -->
   <table id="scoresTable">
     <thead>
       <tr>
@@ -86,16 +30,18 @@
       </tr>
     </thead>
     <tbody id="scoresBody">
-      <!-- Scores générés par JS -->
+      <!-- Scores injectés ici en JS -->
     </tbody>
   </table>
 
+  <!-- Boutons -->
   <div class="buttons">
-    <button onclick="clearScores()">Effacer les scores</button>
-    <button onclick="window.location.href='index.html'">Retour</button>
-    <button onclick="window.location.href='classement_pdf.html'">Classement PDF</button>
+    <button onclick="clearScores()">🗑️ Effacer les scores</button>
+    <button onclick="window.location.href='index.html'">🏠 Retour</button>
+    <button onclick="window.location.href='classement_pdf.html'">📄 Classement PDF</button>
   </div>
 
+  <!-- Script JS -->
   <script>
     function displayScores() {
       const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
@@ -121,6 +67,9 @@
         return;
       }
 
+      // Tri : par nombre de coups puis temps
+      scoreList.sort((a, b) => a.attempts - b.attempts || a.time - b.time);
+
       scoreList.forEach((score, index) => {
         const row = document.createElement("tr");
         const medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "";
@@ -138,13 +87,8 @@
     function filtrerScores() {
       const selectedName = document.getElementById("pseudoFilter").value;
       const allScores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
-
-      if (selectedName === "all") {
-        afficherTableau(allScores);
-      } else {
-        const filtered = allScores.filter(s => s.name === selectedName);
-        afficherTableau(filtered);
-      }
+      const filtered = selectedName === "all" ? allScores : allScores.filter(s => s.name === selectedName);
+      afficherTableau(filtered);
     }
 
     function clearScores() {

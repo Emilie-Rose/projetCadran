@@ -2,7 +2,7 @@ body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
-  background: linear-gradient(135deg, #fff8f0, #fde4ec);
+  background-color: #9c9595;
   color: #333;
   text-align: center;
 }
@@ -27,6 +27,7 @@ input[type="text"] {
   border-radius: 5px;
 }
 
+/* === BOUTONS === */
 .btn, .btn-group button, .btn-group a {
   padding: 10px 20px;
   font-size: 1rem;
@@ -43,20 +44,29 @@ input[type="text"] {
   background-color: #b23c3c;
 }
 
+/* === CLAVIER NUMÉRIQUE === */
 #box {
   display: grid;
   grid-template-columns: repeat(3, 60px);
+  grid-template-rows: repeat(4, 60px);
   gap: 10px;
   justify-content: center;
   margin: 20px auto;
 }
+#zero {
+  grid-column: 2;
+  grid-row: 4;
+}
 
 .button {
-  background-color: #eee;
-  border: 2px solid #8C3232;
-  border-radius: 8px;
-  padding: 15px;
-  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  width: 60px;
+  font-size: 24px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -64,6 +74,13 @@ input[type="text"] {
   background-color: #f8dcdc;
 }
 
+/* ✅ Positionne le 0 au centre de la 4e ligne */
+#zero {
+  grid-column: 2;
+  grid-row: 4;
+}
+
+/* === RÉSULTATS === */
 .correct {
   color: orange;
   font-weight: bold;
@@ -103,7 +120,7 @@ progress {
   height: 20px;
 }
 
-/* Tableaux */
+/* === TABLEAUX === */
 table {
   width: 90%;
   margin: 20px auto;
@@ -122,13 +139,13 @@ th {
   color: white;
 }
 
-/* Podium */
+/* === PODIUM === */
 #podium img {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* Responsive */
+/* === RESPONSIVE === */
 @media (max-width: 600px) {
   #box {
     grid-template-columns: repeat(3, 50px);
@@ -141,4 +158,41 @@ th {
   input[type="text"] {
     width: 160px;
   }
+}
+
+/* === DARK MODE === */
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+body.dark-mode input[type="text"],
+body.dark-mode .button,
+body.dark-mode .btn {
+  background-color: #333;
+  color: #fff;
+  border-color: #888;
+}
+
+body.dark-mode table {
+  background-color: #2b2b2b;
+  color: white;
+}
+
+body.dark-mode th {
+  background-color: #444;
+}
+
+body.dark-mode td {
+  border-color: #666;
+}
+
+body.dark-mode .correct {
+  color: orange;
+}
+body.dark-mode .correct-position {
+  color: lightgreen;
+}
+body.dark-mode .incorrect {
+  color: red;
 }

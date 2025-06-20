@@ -7,60 +7,6 @@
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f8f8f8;
-      padding: 20px;
-      text-align: center;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-      color: #222;
-    }
-
-    table {
-      width: 100%;
-      max-width: 700px;
-      margin: auto;
-      border-collapse: collapse;
-      background-color: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-    }
-
-    th {
-      background-color: #f0f0f0;
-    }
-
-    td:first-child {
-      font-weight: bold;
-    }
-
-    .buttons {
-      margin-top: 30px;
-    }
-
-    .buttons button {
-      margin: 5px;
-      padding: 10px 15px;
-      font-size: 16px;
-      cursor: pointer;
-      background: #7f2afd;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-
-    .buttons button:hover {
-      background: #5c1bb2;
-    }
-  </style>
 </head>
 <body>
 
@@ -75,7 +21,7 @@
         <th>⏱ Temps (s)</th>
         <th>📅 Date</th>
       </tr>
-     </thead>
+    </thead>
     <tbody id="classementBody">
       <!-- Scores insérés ici -->
     </tbody>
@@ -96,6 +42,9 @@
         tbody.innerHTML = '<tr><td colspan="5">Aucun score disponible.</td></tr>';
         return;
       }
+
+      // Tri par coups puis temps
+      scores.sort((a, b) => a.attempts - b.attempts || a.time - b.time);
 
       scores.forEach((score, index) => {
         const row = document.createElement("tr");

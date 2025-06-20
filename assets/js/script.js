@@ -141,10 +141,12 @@ function setupButtonListeners() {
     button.textContent = i;
     box.appendChild(button);
   }
-  const zeroButton = document.createElement("div");
-  zeroButton.classList.add("button");
-  zeroButton.textContent = "0";
-  box.appendChild(zeroButton);
+const zeroButton = document.createElement("div");
+zeroButton.classList.add("button");
+zeroButton.setAttribute("id", "zero"); // ← nécessaire pour le ciblage CSS
+zeroButton.textContent = "0";
+box.appendChild(zeroButton);
+
 
   const buttons = document.getElementsByClassName("button");
   for (let btn of buttons) {
@@ -187,4 +189,19 @@ function saveScore() {
 
 window.addEventListener("DOMContentLoaded", () => {
   setupButtonListeners();
+
+  // Appliquer le thème sombre si sauvegardé
+  const currentMode = localStorage.getItem("theme");
+  if (currentMode === "dark") {
+    document.body.classList.add("dark-mode");
+  }
+
+  const toggleBtn = document.getElementById("darkModeToggle");
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      const mode = document.body.classList.contains("dark-mode") ? "dark" : "light";
+      localStorage.setItem("theme", mode);
+    });
+  }
 });
