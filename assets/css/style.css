@@ -196,3 +196,19 @@ body {
   margin-left: 30px;
 }
 
+#scoreList {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+#scoreList li {
+  background-color: #fff;
+  color: #8C3232;
+  font-weight: bold;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
