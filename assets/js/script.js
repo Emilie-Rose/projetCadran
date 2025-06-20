@@ -69,6 +69,7 @@ function checkPassword() {
       document.getElementById("suiteButton").style.display = "block";
       document.getElementById("resetButton").style.display = "block";
       clearInterval(interval);
+      saveScore();
     } else {
       remainingAttempts--;
 
@@ -83,6 +84,7 @@ function checkPassword() {
         document.getElementById("suiteButton").style.display = "block";
         document.getElementById("resetButton").style.display = "block";
         clearInterval(interval);
+        saveScore();
       } else {
         result.innerHTML = "Mot de passe incorrect! <br>Mot de passe entré : " + displayPassword;
         result.style.color = "maroon";
@@ -189,4 +191,43 @@ function startTimer() {
 window.addEventListener("DOMContentLoaded", function () {
   setupButtonListeners();
   startTimer();
+  displayScores();
 });
+function saveScore() {
+  const newScore = {
+    time: timer,
+    attempts: 10 - remainingAttempts,
+    date: new Date().toLocaleString()
+  };
+
+  // Récupère les anciens scores ou crée une liste vide
+  let scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
+
+  // Ajoute le nouveau score
+  scores.push(newScore);
+
+  // Trie par temps croissant
+  scores.sort((a, b) => a.time - b.time);
+
+  // Garde les 5 meilleurs
+  scores = scores.slice(0, 5);
+
+  // Sauvegarde
+  localStorage.setItem("cadran_scores", JSON.stringify(scores));
+
+  // Met à jour l'affichage
+  displayScores();
+}
+function displayScores() {
+  const scoreList = document.getElementById("scoreList");
+  scoreList.innerHTML = ""; // Vide la liste
+
+  const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
+
+  scores.forEach((score, index) => {
+    const li = document.createElement("li");
+    li.textContent = `#${index + 1} – Temps : ${score.time}s | Coups : ${score.attempts} | Le ${score.date}`;
+    scoreList.appendChild(li);
+  });
+}
+
