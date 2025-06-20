@@ -3,33 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scores</title>
+  <title>Scores du jeu</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #222;
+    }
+
+    table {
+      width: 100%;
+      max-width: 700px;
+      margin: auto;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    th {
+      background-color: #f0f0f0;
+    }
+
+    td:first-child {
+      font-weight: bold;
+    }
+
+    .buttons {
+      margin-top: 30px;
+    }
+
+    .buttons button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      background: #7f2afd;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .buttons button:hover {
+      background: #5c1bb2;
+    }
+  </style>
 </head>
 <body>
+
   <h1>🏆 Meilleurs Scores</h1>
 
-  <div id="scoresTableContainer">
-    <table id="scoresTable">
-      <thead>
-        <tr>
-          <th>🏅 Rang</th>
-          <th>👤 Pseudo</th>
-          <th>🔢 Coups</th>
-          <th>⏱ Temps (s)</th>
-          <th>📅 Date</th>
-        </tr>
-      </thead>
-      <tbody id="scoresBody">
-        <!-- Les scores seront insérés ici par JavaScript -->
-      </tbody>
-    </table>
-  </div>
+  <table id="scoresTable">
+    <thead>
+      <tr>
+        <th>🏅 Rang</th>
+        <th>👤 Pseudo</th>
+        <th>🔢 Coups</th>
+        <th>⏱ Temps (s)</th>
+        <th>📅 Date</th>
+      </tr>
+    </thead>
+    <tbody id="scoresBody">
+      <!-- Scores générés par JS -->
+    </tbody>
+  </table>
 
   <div class="buttons">
     <button onclick="clearScores()">Effacer les scores</button>
     <button onclick="window.location.href='index.html'">Retour</button>
-    <button onclick="window.location.href='classement_pdf.html'">Voir classement PDF</button>
+    <button onclick="window.location.href='classement_pdf.html'">Classement PDF</button>
   </div>
 
   <script>
@@ -38,13 +91,19 @@
       const tbody = document.getElementById("scoresBody");
 
       if (scores.length === 0) {
-        document.getElementById("scoresTable").innerHTML = "<p>Aucun score enregistré pour l'instant.</p>";
+        tbody.innerHTML = '<tr><td colspan="5">Aucun score enregistré.</td></tr>';
         return;
       }
 
       scores.forEach((score, index) => {
         const row = document.createElement("tr");
-        const medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "";
+
+        // Ajout de médailles 🥇🥈🥉 pour les 3 premiers
+        let medal = '';
+        if (index === 0) medal = '🥇';
+        else if (index === 1) medal = '🥈';
+        else if (index === 2) medal = '🥉';
+
         row.innerHTML = `
           <td>${medal} ${index + 1}</td>
           <td>${score.name}</td>
@@ -63,5 +122,6 @@
 
     window.onload = displayScores;
   </script>
+
 </body>
 </html>
