@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classement - Cadran</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    body {
+      text-align: center;
+      background-color: #f4f4f4;
+      font-family: 'Kaori', cursive;
+      padding: 40px;
+    }
+    h1 {
+      color: #8C3232;
+      margin-bottom: 30px;
+    }
+    ul#scoreList {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+      max-width: 600px;
+      text-align: left;
+    }
+    ul#scoreList li {
+      background-color: #fff;
+      margin-bottom: 10px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      font-size: 1.1rem;
+    }
+    .btn {
+      background-color: #D9626B;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      margin: 20px 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background-color: #8C3232;
+    }
+  </style>
+</head>
+<body>
+  <h1>🏆 Classement des meilleurs joueurs</h1>
+  <ul id="scoreList"></ul>
+  <a href="classement_pdf.html" class="btn">📄 Exporter le classement</a>
+
+  <a href="index.html" class="btn">Retour au jeu</a>
+
+  <script>
+  function displayScores() {
+    const scoreList = document.getElementById("scoreList");
+    scoreList.innerHTML = "";
+    const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
+
+    if (scores.length === 0) {
+      scoreList.innerHTML = "<li>Aucun score enregistré pour le moment.</li>";
+      return;
+    }
+
+    scores.sort((a, b) => a.attempts - b.attempts);
+
+    scores.forEach((score, index) => {
+      const li = document.createElement("li");
+
+      let medal = "";
+      if (index === 0) medal = "🥇 ";
+      else if (index === 1) medal = "🥈 ";
+      else if (index === 2) medal = "🥉 ";
+
+      li.textContent = `${medal}#${index + 1} – Coups : ${score.attempts} | Temps : ${score.time}s | Le ${score.date}`;
+      scoreList.appendChild(li);
+    });
+  }
+
+  function clearScores() {
+    localStorage.removeItem("cadran_scores");
+    displayScores();
+  }
+
+  window.addEventListener("DOMContentLoaded", displayScores);
+</script>
+
+</body>
+</html>

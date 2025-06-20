@@ -207,8 +207,10 @@ function saveScore() {
   scores.push(newScore);
 
   // Trie par temps croissant
-  scores.sort((a, b) => a.time - b.time);
+  //scores.sort((a, b) => a.time - b.time);
 
+  // Trie par nombre de tentatives croissant
+scores.sort((a, b) => a.attempts - b.attempts);
   // Garde les 5 meilleurs
   scores = scores.slice(0, 5);
 
@@ -220,14 +222,32 @@ function saveScore() {
 }
 function displayScores() {
   const scoreList = document.getElementById("scoreList");
-  scoreList.innerHTML = ""; // Vide la liste
+  if (!scoreList) return;
+
+  scoreList.innerHTML = "";
 
   const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
 
+  if (scores.length === 0) {
+    scoreList.innerHTML = "<li>Aucun score enregistré pour le moment.</li>";
+    return;
+  }
+
   scores.forEach((score, index) => {
     const li = document.createElement("li");
-    li.textContent = `#${index + 1} – Temps : ${score.time}s | Coups : ${score.attempts} | Le ${score.date}`;
+
+    let medal = "";
+    if (index === 0) medal = "🥇 ";
+    else if (index === 1) medal = "🥈 ";
+    else if (index === 2) medal = "🥉 ";
+
+    li.textContent = `${medal}#${index + 1} – Coups : ${score.attempts} | Temps : ${score.time}s | Le ${score.date}`;
     scoreList.appendChild(li);
   });
+}
+
+function clearScores() {
+  localStorage.removeItem("cadran_scores");
+  displayScores();
 }
 
