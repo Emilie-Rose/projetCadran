@@ -18,6 +18,10 @@
       color: #222;
     }
 
+    #filtreContainer {
+      margin-bottom: 20px;
+    }
+
     table {
       width: 100%;
       max-width: 700px;
@@ -64,6 +68,13 @@
 
   <h1>🏆 Meilleurs Scores</h1>
 
+  <div id="filtreContainer">
+    <label for="pseudoFilter">Filtrer par pseudo :</label>
+    <select id="pseudoFilter" onchange="filtrerScores()">
+      <option value="all">Tous les joueurs</option>
+    </select>
+  </div>
+
   <table id="scoresTable">
     <thead>
       <tr>
@@ -88,22 +99,31 @@
   <script>
     function displayScores() {
       const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
-      const tbody = document.getElementById("scoresBody");
+      const select = document.getElementById("pseudoFilter");
+      const uniqueNames = [...new Set(scores.map(s => s.name))];
 
-      if (scores.length === 0) {
-        tbody.textContent = '<tr><td colspan="5">Aucun score enregistré.</td></tr>';
+      uniqueNames.forEach(name => {
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.textContent = name;
+        select.appendChild(opt);
+      });
+
+      afficherTableau(scores);
+    }
+
+    function afficherTableau(scoreList) {
+      const tbody = document.getElementById("scoresBody");
+      tbody.innerHTML = "";
+
+      if (scoreList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">Aucun score trouvé pour ce pseudo.</td></tr>';
         return;
       }
 
-      scores.forEach((score, index) => {
+      scoreList.forEach((score, index) => {
         const row = document.createElement("tr");
-
-        // Ajout de médailles 🥇🥈🥉 pour les 3 premiers
-        let medal = '';
-        if (index === 0) medal = '🥇';
-        else if (index === 1) medal = '🥈';
-        else if (index === 2) medal = '🥉';
-
+        const medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "";
         row.innerHTML = `
           <td>${medal} ${index + 1}</td>
           <td>${score.name}</td>
@@ -113,6 +133,18 @@
         `;
         tbody.appendChild(row);
       });
+    }
+
+    function filtrerScores() {
+      const selectedName = document.getElementById("pseudoFilter").value;
+      const allScores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
+
+      if (selectedName === "all") {
+        afficherTableau(allScores);
+      } else {
+        const filtered = allScores.filter(s => s.name === selectedName);
+        afficherTableau(filtered);
+      }
     }
 
     function clearScores() {

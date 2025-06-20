@@ -3,55 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Classement PDF</title>
+  <title>Classement à imprimer</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #222;
+    }
+
+    table {
+      width: 100%;
+      max-width: 700px;
+      margin: auto;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    th {
+      background-color: #f0f0f0;
+    }
+
+    td:first-child {
+      font-weight: bold;
+    }
+
+    .buttons {
+      margin-top: 30px;
+    }
+
+    .buttons button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      background: #7f2afd;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .buttons button:hover {
+      background: #5c1bb2;
+    }
+  </style>
 </head>
 <body>
-  <h1>📋 Classement Final</h1>
-  <div id="pdfContent">
-    <table>
-      <thead>
-        <tr>
-          <th>🏅 Rang</th>
-          <th>👤 Pseudo</th>
-          <th>🔢 Coups</th>
-          <th>⏱ Temps (s)</th>
-          <th>📅 Date</th>
-        </tr>
-      </thead>
-      <tbody id="classementBody">
-        <!-- Rangements JS ici -->
-      </tbody>
-    </table>
-  </div>
+
+  <h1>🏅 Classement des joueurs</h1>
+
+  <table id="classementTable">
+    <thead>
+      <tr>
+        <th>🏅 Rang</th>
+        <th>👤 Pseudo</th>
+        <th>🔢 Coups</th>
+        <th>⏱ Temps (s)</th>
+        <th>📅 Date</th>
+      </tr>
+    </thead>
+    <tbody id="classementBody">
+      <!-- Scores insérés ici -->
+    </tbody>
+  </table>
+
   <div class="buttons">
-    <button onclick="window.print()">📄 Imprimer / Exporter en PDF</button>
-    <button onclick="window.location.href='index.html'">Retour</button>
+    <button onclick="window.print()">🖨️ Imprimer</button>
+    <button onclick="window.location.href='index.html'">🏠 Menu principal</button>
   </div>
 
   <script>
-    function loadClassement() {
+    function afficherClassement() {
       const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
       const tbody = document.getElementById("classementBody");
+
       if (scores.length === 0) {
-        tbody.textContent = '<tr><td colspan="5">Aucun score à afficher.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5">Aucun score disponible.</td></tr>';
         return;
       }
-      scores.forEach((s, i) => {
+
+      scores.forEach((score, index) => {
         const row = document.createElement("tr");
-        const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "";
         row.innerHTML = `
-          <td>${medal} ${i + 1}</td>
-          <td>${s.name}</td>
-          <td>${s.attempts}</td>
-          <td>${s.time}</td>
-          <td>${s.date}</td>
+          <td>${index + 1}</td>
+          <td>${score.name}</td>
+          <td>${score.attempts}</td>
+          <td>${score.time}</td>
+          <td>${score.date}</td>
         `;
         tbody.appendChild(row);
       });
     }
 
-    window.onload = loadClassement;
+    window.onload = afficherClassement;
   </script>
+
 </body>
 </html>
