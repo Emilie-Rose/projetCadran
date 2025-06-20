@@ -3,6 +3,9 @@ let remainingAttempts = 10;
 let enteredPasswords = [];
 let passwordHistory = document.getElementById("passwordHistory");
 let clickSound = new Audio('assets/audio/son_toucheMachAEcrire.mp3'); 
+let timer = 0;
+let interval;
+
 // génère un mot de passe à 3 chiffres aléatoire en sélectionnant des chiffres de manière aléatoire et en les supprimant de la liste des chiffres disponibles.
 function generatePassword() {
   let password = "";
@@ -106,6 +109,8 @@ function checkPassword() {
     console.log(enteredPassword);
     passwordHistory.appendChild(listItem);
     //resetInput();
+    clearInterval(interval);
+
   }
 }
 
@@ -160,7 +165,16 @@ function clearInput() {
 //event listener
 window.addEventListener("DOMContentLoaded", function () {
   setupButtonListeners();
+  startTimer(); // ⬅️ on démarre le timer au chargement
 });
+
+function startTimer() {
+  interval = setInterval(() => {
+    timer++;
+    document.getElementById("timer").textContent = timer;
+  }, 1000);
+}
+
 
 // localstorage A faire apres ou avant le timer
 // function updateScore(){
