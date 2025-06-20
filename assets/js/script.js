@@ -59,7 +59,8 @@ function checkPassword() {
     }
 
     if (enteredPassword === password) {
-      result.innerHTML = "Mot de passe correct!";
+      //result.innerHTML = "Mot de passe correct!";
+      result.classList.add("animate-win");
       result.style.color = "black";
       result.style.fontWeight = "bold";
       result.style.fontStyle = "italic";
@@ -131,6 +132,8 @@ function resetGame() {
   document.getElementById("suiteButton").style.display = "none";
   document.getElementById("resetButton").style.display = "none";
   document.getElementById("passwordHistory").innerHTML = "<h3>Historique des mots de passe proposés :</h3>";
+  document.getElementById("result").classList.remove("animate-win");
+
 }
 
 // Crée le cadran et les boutons numériques
