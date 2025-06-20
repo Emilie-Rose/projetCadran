@@ -91,7 +91,7 @@
       const tbody = document.getElementById("scoresBody");
 
       if (scores.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5">Aucun score enregistré.</td></tr>';
+        tbody.textContent = '<tr><td colspan="5">Aucun score enregistré.</td></tr>';
         return;
       }
 

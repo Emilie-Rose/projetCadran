@@ -34,7 +34,7 @@
       const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
       const tbody = document.getElementById("classementBody");
       if (scores.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5">Aucun score à afficher.</td></tr>';
+        tbody.textContent = '<tr><td colspan="5">Aucun score à afficher.</td></tr>';
         return;
       }
       scores.forEach((s, i) => {
