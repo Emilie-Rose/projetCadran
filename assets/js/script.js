@@ -229,7 +229,11 @@ function displayScores() {
   const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
 
   if (scores.length === 0) {
-    scoreList.innerHTML = "<li>Aucun score enregistré pour le moment.</li>";
+    let emptyMessage = document.createElement("li");
+emptyMessage.textContent = "Aucun score enregistré pour le moment.";
+emptyMessage.style.color = "gray";
+emptyMessage.style.fontStyle = "italic";
+scoreList.appendChild(emptyMessage);
     return;
   }
 
