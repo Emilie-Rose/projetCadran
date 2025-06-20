@@ -91,6 +91,8 @@ function checkPassword() {
         result.style.fontStyle = "italic";
         input.value = "";
         document.getElementById("remaining").innerHTML = remainingAttempts;
+        document.getElementById("progressBar").value = remainingAttempts;
+
       }
     }
     if (remainingAttempts === 0 || enteredPassword === password) {
@@ -110,6 +112,7 @@ function checkPassword() {
     passwordHistory.appendChild(listItem);
     //resetInput();
     clearInterval(interval);
+    
 
   }
 }
