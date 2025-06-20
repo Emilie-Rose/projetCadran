@@ -1,222 +1,144 @@
-@font-face {
-  font-family: "KaoriGel";
-  src: url("../fonts/KaoriGel.ttf") format("truetype");
-}
-
-* {
-  box-sizing: border-box;
-  background-color: #de8b8b;
-  font-family: 'Kaori', cursive ; 
-}
-/* pour le timer a implementer : a faire*/
-/* .display{
-  display: -webkit-box;
-  margin-bottom: 25px;
-} */
-
-.top-nav {
-  transform: translate(-50%, 0);
-  text-align: end;
-  margin-left: 20%;
-  /* display: grid;
-  grid-template-columns: 20vw 60vw 20vw;
-  grid-template-rows: 20vw 60vw 20vw;
-  transform: translate(-50%, 0);
-  text-align: center;
-  margin-left: 20%; */
-  /* grid-template-areas:
-    "header myHeader myHeader"
-    "nav myMain myMain"
-    "nav footer footer"; */
-}
- .containers{
-  display: flex;
-    justify-content: center;
- }
-
- /* centré horizontalement et verticalement dans la fenêtre du navigateur */
-.wrapper {
-  display: flex;
-  place-content: center;
-  width: 100vw;
-  height: 100vh;
-  justify-content: center;
-  padding: 20px;
-}
-.wrapper-left {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 50vw;
-  height: 50vh;
-  
-}
-
-.wrapper-right {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 50vw;
-  height: 50vh;
-}
-
-/* a faire
-.nbInput {
-} */
-
 body {
-  margin: 20px;
-}
-#box {
-  /* carré et responsive */
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  /*3 colonnes */
-  grid-template-rows: repeat(4, 1fr);
-  /* 4 lignes */
-  width: 40vw;
-  /* 40% hauteur*/
-  height: 40vw;
-  /* 40% largeur d'ecran*/
-  min-height: 80vh;
-  /* border: 10px solid transparent; */
-  border: 10px solid #8C3232;
-  border-radius: 10px;
-  /* couleur de la box #8C3232 */
-  background-color: #8C3232;
-  
-
-  grid-gap: 5px;
-  /* espacement entre les cellules d'une grille, espace de 3 pixels entre chaque élément dans la grille, créant une marge visuelle entre eux*/
-}
-.title{
-  transform: translate(-50%, 0);
-    text-align: center;
-    margin-left: 20%;
-}
-
-/* L'élément avec l'ID "zero" est positionné dans la deuxième colonne de la grille. */
-#btn-0 {
-  grid-column-start: 2;
-  grid-row: 4;
-}
-
-#box>div:active
-{
-  transform: scale(.9);
-  
-}
-
-#box>div:hover {
-  /*masquer l'image du backgroud-image (url) et le remplacer par la couleur de fond #F2949C*/
-  background-image: none;
-  background-color: #F2949C;
-  color: #8C3232;
-}
-
-
-/* Tous les éléments <div> qui sont enfants directs de l'élément avec l'ID "box" centrés horizontalement et verticalement dans leur cellule de grille respective. */
-#box > div {
-  display: grid;
-  place-content: center;
-  border-radius: 10px;
-  cursor: pointer;
-  /* rayon */
-  /* background-color: purple; */
-  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
-  background-image: url("../img/fleursCerisier.png"); /* Chemin de l'image de fond */
-  background-size: cover;
-  font-weight: bold;
-  font-size: 1.5rem; /*160%*/
-
+  background: linear-gradient(135deg, #fff8f0, #fde4ec);
+  color: #333;
+  text-align: center;
 }
 
+h1, h2, h3 {
+  margin-top: 20px;
+}
 
-/* Les éléments avec la classe "correct" auront une couleur de texte orange. */
+.input-group {
+  margin: 30px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+input[type="text"] {
+  padding: 10px;
+  font-size: 1rem;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn, .btn-group button, .btn-group a {
+  padding: 10px 20px;
+  font-size: 1rem;
+  margin: 5px;
+  background-color: #8C3232;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:hover, .btn-group button:hover, .btn-group a:hover {
+  background-color: #b23c3c;
+}
+
+#box {
+  display: grid;
+  grid-template-columns: repeat(3, 60px);
+  gap: 10px;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.button {
+  background-color: #eee;
+  border: 2px solid #8C3232;
+  border-radius: 8px;
+  padding: 15px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #f8dcdc;
+}
+
 .correct {
   color: orange;
-  font-size: 1.5rem;
+  font-weight: bold;
 }
 
-/* Les éléments avec la classe "correct-position" auront une couleur de texte verte. */
 .correct-position {
   color: green;
-  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .incorrect {
   color: red;
-  font-size: 1.5rem;
-}
-
-/* si le mdp dejà saisie, message apparait en violet*/
-.duplicate {
-  color: rgb(75, 12, 75);
-}
-
-
-.container-info{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-}
-.btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  background-color: #D9626B;
-  padding: 5px;
-  border-radius: 5px;
-  margin-bottom: 35px;
-  width: 100px;
-  font-size: 20px;
-
-}
-
-.btn p {
-  margin: 0;
-  color: 
-  #8C3232;
   font-weight: bold;
-  background-color: #D9626B;
 }
 
-.btn:hover {
-  background-color: #8C3232;
-  color: #D9626B;
+#result {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  min-height: 40px;
 }
 
-.passwordHistory{
-  width: 400px;
-  margin-left: 30px;
+#passwordHistory {
+  margin-top: 30px;
+  font-size: 1.1rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-#scoreList {
-  list-style: none;
-  padding: 0;
-  margin-top: 10px;
+#timer, #remaining {
+  font-size: 1.2rem;
+  margin: 10px;
 }
 
-#scoreList li {
-  background-color: #fff;
-  color: #8C3232;
-  font-weight: bold;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  padding: 8px 12px;
+progress {
+  width: 80%;
+  height: 20px;
+}
+
+/* Tableaux */
+table {
+  width: 90%;
+  margin: 20px auto;
+  border-collapse: collapse;
   font-size: 1rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-}
-#result.animate-win {
-  animation: winPulse 0.8s ease-in-out infinite alternate;
 }
 
-@keyframes winPulse {
-  0% { transform: scale(1); color: green; }
-  100% { transform: scale(1.1); color: darkgreen; }
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #8C3232;
+  color: white;
+}
+
+/* Podium */
+#podium img {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  #box {
+    grid-template-columns: repeat(3, 50px);
+    gap: 8px;
+  }
+  .button {
+    padding: 12px;
+    font-size: 1rem;
+  }
+  input[type="text"] {
+    width: 160px;
+  }
 }

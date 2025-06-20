@@ -3,79 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exporter le classement</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 40px;
-      background: white;
-      color: #333;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-    li {
-      padding: 10px 15px;
-      border: 1px solid #ccc;
-      margin-bottom: 8px;
-      border-radius: 6px;
-    }
-    .btn-print {
-      display: block;
-      margin: 20px auto;
-      padding: 10px 20px;
-      font-size: 1rem;
-      background: #D9626B;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    @media print {
-      .btn-print {
-        display: none;
-      }
-    }
-  </style>
+  <title>Classement PDF</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Classement des meilleurs joueurs</h1>
-  <ul id="scoreList"></ul>
-  <button class="btn-print" onclick="window.print()">Imprimer ou exporter en PDF</button>
+  <h1>📋 Classement Final</h1>
+  <div id="pdfContent">
+    <table>
+      <thead>
+        <tr>
+          <th>🏅 Rang</th>
+          <th>👤 Pseudo</th>
+          <th>🔢 Coups</th>
+          <th>⏱ Temps (s)</th>
+          <th>📅 Date</th>
+        </tr>
+      </thead>
+      <tbody id="classementBody">
+        <!-- Rangements JS ici -->
+      </tbody>
+    </table>
+  </div>
+  <div class="buttons">
+    <button onclick="window.print()">📄 Imprimer / Exporter en PDF</button>
+    <button onclick="window.location.href='index.html'">Retour</button>
+  </div>
 
   <script>
-    function displayScores() {
-      const scoreList = document.getElementById("scoreList");
+    function loadClassement() {
       const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
-
+      const tbody = document.getElementById("classementBody");
       if (scores.length === 0) {
-        scoreList.innerHTML = "<li>Aucun score enregistré pour le moment.</li>";
+        tbody.innerHTML = '<tr><td colspan="5">Aucun score à afficher.</td></tr>';
         return;
       }
-
-      scores.sort((a, b) => a.attempts - b.attempts);
-
-      scores.forEach((score, index) => {
-        let medal = "";
-        if (index === 0) medal = "🥇 ";
-        else if (index === 1) medal = "🥈 ";
-        else if (index === 2) medal = "🥉 ";
-
-        const li = document.createElement("li");
-        li.textContent = `${medal}#${index + 1} – Coups : ${score.attempts} | Temps : ${score.time}s | Le ${score.date}`;
-        scoreList.appendChild(li);
+      scores.forEach((s, i) => {
+        const row = document.createElement("tr");
+        const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "";
+        row.innerHTML = `
+          <td>${medal} ${i + 1}</td>
+          <td>${s.name}</td>
+          <td>${s.attempts}</td>
+          <td>${s.time}</td>
+          <td>${s.date}</td>
+        `;
+        tbody.appendChild(row);
       });
     }
 
-    window.addEventListener("DOMContentLoaded", displayScores);
+    window.onload = loadClassement;
   </script>
 </body>
 </html>

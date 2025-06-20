@@ -1,188 +1,171 @@
 let password = generatePassword();
 let remainingAttempts = 10;
 let enteredPasswords = [];
-let passwordHistory = document.getElementById("passwordHistory");
-let clickSound = new Audio('assets/audio/son_toucheMachAEcrire.mp3');
 let timer = 0;
 let interval;
-let minAttempts = Infinity; // nombre minimum de tentatives (non utilisé encore mais prêt)
+let minAttempts = Infinity;
+let playerName = "";
 
-// Génère un mot de passe à 3 chiffres
+const clickSound = new Audio("assets/audio/son_toucheMachAEcrire.mp3");
+
+// Génère un mot de passe unique à 3 chiffres
 function generatePassword() {
-  let password = "";
-  let digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  const digits = ["0","1","2","3","4","5","6","7","8","9"];
+  let pwd = "";
   for (let i = 0; i < 3; i++) {
-    let randomIndex = Math.floor(Math.random() * digits.length);
-    password += digits[randomIndex];
-    digits.splice(randomIndex, 1);
+    const randIndex = Math.floor(Math.random() * digits.length);
+    pwd += digits[randIndex];
+    digits.splice(randIndex, 1);
   }
-  return password;
+  return pwd;
 }
 
-// Ajoute un chiffre à la saisie utilisateur
+// Gère l'affichage des chiffres saisis
 function dial(number) {
+  const input = document.getElementById("input");
   clickSound.play();
-  let input = document.getElementById("input");
-  if (input.value.length < 3) {
-    input.value += number;
-  }
+  if (input.value.length < 3) input.value += number;
 }
 
 // Vérifie le mot de passe saisi
 function checkPassword() {
-  let input = document.getElementById("input");
-  let result = document.getElementById("result");
-  let enteredPassword = input.value;
+  const input = document.getElementById("input");
+  const result = document.getElementById("result");
+  const value = input.value;
+
+  if (value.length !== 3) return;
+  if (enteredPasswords.includes(value)) {
+    result.textContent = "Vous avez déjà entré ce mot de passe!";
+    result.style.color = "maroon";
+    input.value = "";
+    return;
+  }
+
+  enteredPasswords.push(value);
   let displayPassword = "";
 
-  if (enteredPassword.length === 3) {
-    if (enteredPasswords.includes(enteredPassword)) {
-      result.innerHTML = "Vous avez déjà entré ce mot de passe!";
+  for (let i = 0; i < 3; i++) {
+    const digit = value.charAt(i);
+    if (password.includes(digit)) {
+      displayPassword += digit === password.charAt(i)
+        ? `<span class='correct-position'>${digit}</span>`
+        : `<span class='correct'>${digit}</span>`;
+    } else {
+      displayPassword += `<span class='incorrect'>${digit}</span>`;
+    }
+  }
+
+  if (value === password) {
+    winGame();
+  } else {
+    remainingAttempts--;
+    if (remainingAttempts === 0) {
+      loseGame();
+    } else {
+      result.innerHTML = `Mot de passe incorrect!<br> ${displayPassword}`;
       result.style.color = "maroon";
       input.value = "";
-      return;
+      document.getElementById("remaining").textContent = remainingAttempts;
+      document.getElementById("progressBar").value = remainingAttempts;
     }
-
-    enteredPasswords.push(enteredPassword);
-
-    for (let i = 0; i < enteredPassword.length; i++) {
-      let digit = enteredPassword.charAt(i);
-      if (password.includes(digit)) {
-        if (digit === password.charAt(i)) {
-          displayPassword += '<span class="correct-position">' + digit + "</span>";
-        } else {
-          displayPassword += '<span class="correct">' + digit + "</span>";
-        }
-      } else {
-        displayPassword += '<span class="incorrect">' + digit + "</span>";
-      }
-    }
-
-    if (enteredPassword === password) {
-      //result.innerHTML = "Mot de passe correct!";
-      result.classList.add("animate-win");
-      result.style.color = "black";
-      result.style.fontWeight = "bold";
-      result.style.fontStyle = "italic";
-      input.disabled = true;
-      document.getElementById("remaining").innerHTML = "0";
-      document.getElementById("progressBar").value = 0;
-      document.getElementById("suiteButton").style.display = "block";
-      document.getElementById("resetButton").style.display = "block";
-      clearInterval(interval);
-      saveScore();
-    } else {
-      remainingAttempts--;
-
-      if (remainingAttempts === 0) {
-        result.innerHTML = "Nombre maximal d'essais atteint. Le mot de passe était : " + password;
-        result.style.color = "maroon";
-        result.style.fontWeight = "bold";
-        result.style.fontStyle = "italic";
-        input.disabled = true;
-        document.getElementById("remaining").innerHTML = "0";
-        document.getElementById("progressBar").value = 0;
-        document.getElementById("suiteButton").style.display = "block";
-        document.getElementById("resetButton").style.display = "block";
-        clearInterval(interval);
-        saveScore();
-      } else {
-        result.innerHTML = "Mot de passe incorrect! <br>Mot de passe entré : " + displayPassword;
-        result.style.color = "maroon";
-        result.style.fontWeight = "bold";
-        result.style.fontStyle = "italic";
-        input.value = "";
-        document.getElementById("remaining").innerHTML = remainingAttempts;
-        document.getElementById("progressBar").value = remainingAttempts;
-      }
-    }
-
-    if (remainingAttempts === 0 || enteredPassword === password) {
-      minAttempts = Math.min(minAttempts, 10 - remainingAttempts);
-    }
-
-    let listItem = document.createElement("div");
-    listItem.style.textAlign = "center";
-    listItem.innerHTML = displayPassword;
-    passwordHistory.appendChild(listItem);
   }
+
+  if (remainingAttempts === 0 || value === password) {
+    minAttempts = Math.min(minAttempts, 10 - remainingAttempts);
+    saveScore();
+    clearInterval(interval);
+  }
+
+  // Ajoute à l'historique visuel
+  const listItem = document.createElement("div");
+  listItem.style.textAlign = "center";
+  listItem.innerHTML = displayPassword;
+  document.getElementById("passwordHistory").appendChild(listItem);
 }
 
-// Redirection vers le gif de victoire
-const suiteButton = document.getElementById("suiteButton");
-const redirectToOtherPage = () => {
-  alert("Bravo !!! Fermez cette fenêtre pour découvrir la surprise ?!");
-  window.location.href = "assets/img/bravo.gif";
-};
+function winGame() {
+  const result = document.getElementById("result");
+  result.textContent = "Mot de passe correct!";
+  result.style.color = "green";
+  document.getElementById("input").disabled = true;
+  document.getElementById("remaining").textContent = "0";
+  document.getElementById("suiteButton").style.display = "block";
+}
 
-// Réinitialise le jeu
+function loseGame() {
+  const result = document.getElementById("result");
+  result.innerHTML = `Nombre maximal d'essais atteint. Le mot de passe était : <b>${password}</b>`;
+  result.style.color = "maroon";
+  document.getElementById("input").disabled = true;
+  document.getElementById("remaining").textContent = "0";
+  document.getElementById("suiteButton").style.display = "block";
+}
+
+function redirectToOtherPage() {
+  alert("Bravo !!! Fermez cette fenêtre pour découvrir la surprise !");
+  window.location.href = "assets/img/bravo.gif";
+}
+
 function resetGame() {
   password = generatePassword();
   remainingAttempts = 10;
   enteredPasswords = [];
   timer = 0;
+
   document.getElementById("timer").textContent = "0";
   clearInterval(interval);
   startTimer();
+
   document.getElementById("input").value = "";
   document.getElementById("input").disabled = false;
   document.getElementById("remaining").textContent = remainingAttempts;
   document.getElementById("progressBar").value = 10;
   document.getElementById("result").innerHTML = "";
   document.getElementById("suiteButton").style.display = "none";
-  document.getElementById("resetButton").style.display = "none";
-  document.getElementById("passwordHistory").innerHTML = "<h3>Historique des mots de passe proposés :</h3>";
-  document.getElementById("result").classList.remove("animate-win");
-
+  document.getElementById("passwordHistory").innerHTML = "<h3>Historique :</h3>";
 }
 
-// Crée le cadran et les boutons numériques
-function setupButtonListeners() {
-  let box = document.getElementById("box");
+function showInfo() {
+  alert("Instructions :\n\n1. Devinez un mot de passe à 3 chiffres.\n2. 10 essais maximum.\n3. Vert = chiffre bien placé, Orange = mal placé, Rouge = absent.");
+}
 
+function clearInput() {
+  document.getElementById("input").value = "";
+}
+
+function setupButtonListeners() {
+  const box = document.getElementById("box");
   for (let i = 1; i <= 9; i++) {
-    let button = document.createElement("div");
+    const button = document.createElement("div");
     button.classList.add("button");
     button.textContent = i;
     box.appendChild(button);
   }
-
-  let zeroButton = document.createElement("div");
+  const zeroButton = document.createElement("div");
   zeroButton.classList.add("button");
-  zeroButton.setAttribute("id", "btn-0");
   zeroButton.textContent = "0";
   box.appendChild(zeroButton);
 
-  let buttons = document.getElementsByClassName("button");
-  for (let j = 0; j < buttons.length; j++) {
-    buttons[j].addEventListener("click", function () {
-      dial(this.textContent);
-    });
+  const buttons = document.getElementsByClassName("button");
+  for (let btn of buttons) {
+    btn.addEventListener("click", () => dial(btn.textContent));
   }
 
   document.getElementById("suiteButton").addEventListener("click", redirectToOtherPage);
 }
 
-// Affiche les règles
-function showInfo() {
-  alert(
-    "Instructions :\n\n" +
-    "1. Recherchez un mot de passe à 3 chiffres en sélectionnant une combinaison.\n" +
-    "2. Vous avez 10 tentatives.\n" +
-    "3. Indices :\n" +
-    "- Chiffre correct et bien placé : vert\n" +
-    "- Chiffre correct mais mal placé : orange\n" +
-    "- Chiffre incorrect : rouge\n\n" +
-    "Bonne chance !"
-  );
+function startGame() {
+  const nameField = document.getElementById("playerName");
+  if (nameField.value.trim() === "") {
+    alert("Veuillez entrer un pseudo.");
+    return;
+  }
+  playerName = nameField.value.trim();
+  document.getElementById("pseudoInput").style.display = "none";
+  document.getElementById("gameZone").style.display = "block";
+  resetGame();
 }
 
-// Vide le champ de saisie
-function clearInput() {
-  document.getElementById("input").value = "";
-}
-
-// Démarre le timer
 function startTimer() {
   interval = setInterval(() => {
     timer++;
@@ -190,71 +173,18 @@ function startTimer() {
   }, 1000);
 }
 
-// Initialisation
-window.addEventListener("DOMContentLoaded", function () {
-  setupButtonListeners();
-  startTimer();
-  displayScores();
-});
 function saveScore() {
-  const newScore = {
-    time: timer,
-    attempts: 10 - remainingAttempts,
-    date: new Date().toLocaleString()
-  };
-
-  // Récupère les anciens scores ou crée une liste vide
-  let scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
-
-  // Ajoute le nouveau score
-  scores.push(newScore);
-
-  // Trie par temps croissant
-  //scores.sort((a, b) => a.time - b.time);
-
-  // Trie par nombre de tentatives croissant
-scores.sort((a, b) => a.attempts - b.attempts);
-  // Garde les 5 meilleurs
-  scores = scores.slice(0, 5);
-
-  // Sauvegarde
-  localStorage.setItem("cadran_scores", JSON.stringify(scores));
-
-  // Met à jour l'affichage
-  displayScores();
-}
-function displayScores() {
-  const scoreList = document.getElementById("scoreList");
-  if (!scoreList) return;
-
-  scoreList.innerHTML = "";
-
   const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
-
-  if (scores.length === 0) {
-    let emptyMessage = document.createElement("li");
-emptyMessage.textContent = "Aucun score enregistré pour le moment.";
-emptyMessage.style.color = "gray";
-emptyMessage.style.fontStyle = "italic";
-scoreList.appendChild(emptyMessage);
-    return;
-  }
-
-  scores.forEach((score, index) => {
-    const li = document.createElement("li");
-
-    let medal = "";
-    if (index === 0) medal = "🥇 ";
-    else if (index === 1) medal = "🥈 ";
-    else if (index === 2) medal = "🥉 ";
-
-    li.textContent = `${medal}#${index + 1} – Coups : ${score.attempts} | Temps : ${score.time}s | Le ${score.date}`;
-    scoreList.appendChild(li);
+  scores.push({
+    name: playerName,
+    attempts: 10 - remainingAttempts,
+    time: timer,
+    date: new Date().toLocaleDateString("fr-FR")
   });
+  scores.sort((a, b) => a.attempts - b.attempts || a.time - b.time);
+  localStorage.setItem("cadran_scores", JSON.stringify(scores.slice(0, 10)));
 }
 
-function clearScores() {
-  localStorage.removeItem("cadran_scores");
-  displayScores();
-}
-
+window.addEventListener("DOMContentLoaded", () => {
+  setupButtonListeners();
+});

@@ -3,90 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Classement - Cadran</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <style>
-    body {
-      text-align: center;
-      background-color: #f4f4f4;
-      font-family: 'Kaori', cursive;
-      padding: 40px;
-    }
-    h1 {
-      color: #8C3232;
-      margin-bottom: 30px;
-    }
-    ul#scoreList {
-      list-style: none;
-      padding: 0;
-      margin: 0 auto;
-      max-width: 600px;
-      text-align: left;
-    }
-    ul#scoreList li {
-      background-color: #fff;
-      margin-bottom: 10px;
-      padding: 10px 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      font-size: 1.1rem;
-    }
-    .btn {
-      background-color: #D9626B;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      margin: 20px 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn:hover {
-      background-color: #8C3232;
-    }
-  </style>
+  <title>Scores</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🏆 Classement des meilleurs joueurs</h1>
-  <ul id="scoreList"></ul>
-  <a href="classement_pdf.html" class="btn">📄 Exporter le classement</a>
+  <h1>🏆 Meilleurs Scores</h1>
 
-  <a href="index.html" class="btn">Retour au jeu</a>
+  <div id="scoresTableContainer">
+    <table id="scoresTable">
+      <thead>
+        <tr>
+          <th>🏅 Rang</th>
+          <th>👤 Pseudo</th>
+          <th>🔢 Coups</th>
+          <th>⏱ Temps (s)</th>
+          <th>📅 Date</th>
+        </tr>
+      </thead>
+      <tbody id="scoresBody">
+        <!-- Les scores seront insérés ici par JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="buttons">
+    <button onclick="clearScores()">Effacer les scores</button>
+    <button onclick="window.location.href='index.html'">Retour</button>
+    <button onclick="window.location.href='classement_pdf.html'">Voir classement PDF</button>
+  </div>
 
   <script>
-  function displayScores() {
-    const scoreList = document.getElementById("scoreList");
-    scoreList.innerHTML = "";
-    const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
+    function displayScores() {
+      const scores = JSON.parse(localStorage.getItem("cadran_scores")) || [];
+      const tbody = document.getElementById("scoresBody");
 
-    if (scores.length === 0) {
-      scoreList.innerHTML = "<li>Aucun score enregistré pour le moment.</li>";
-      return;
+      if (scores.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">Aucun score enregistré.</td></tr>';
+        return;
+      }
+
+      scores.forEach((score, index) => {
+        const row = document.createElement("tr");
+        const medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "";
+        row.innerHTML = `
+          <td>${medal} ${index + 1}</td>
+          <td>${score.name}</td>
+          <td>${score.attempts}</td>
+          <td>${score.time}</td>
+          <td>${score.date}</td>
+        `;
+        tbody.appendChild(row);
+      });
     }
 
-    scores.sort((a, b) => a.attempts - b.attempts);
+    function clearScores() {
+      localStorage.removeItem("cadran_scores");
+      location.reload();
+    }
 
-    scores.forEach((score, index) => {
-      const li = document.createElement("li");
-
-      let medal = "";
-      if (index === 0) medal = "🥇 ";
-      else if (index === 1) medal = "🥈 ";
-      else if (index === 2) medal = "🥉 ";
-
-      li.textContent = `${medal}#${index + 1} – Coups : ${score.attempts} | Temps : ${score.time}s | Le ${score.date}`;
-      scoreList.appendChild(li);
-    });
-  }
-
-  function clearScores() {
-    localStorage.removeItem("cadran_scores");
-    displayScores();
-  }
-
-  window.addEventListener("DOMContentLoaded", displayScores);
-</script>
-
+    window.onload = displayScores;
+  </script>
 </body>
 </html>
